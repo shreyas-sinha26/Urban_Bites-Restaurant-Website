@@ -1,0 +1,182 @@
+/* delivery.css */
+
+/* Background settings */
+body {
+  background: url(../img/petr-sevcovic-qE1jxYXiwOA-unsplash.jpg) no-repeat center center fixed;
+  background-size: cover;
+  backdrop-filter: blur(8px); /* Blur effect */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+/* Navigation styling */
+nav {
+  position: absolute;
+  top: 10px;
+  width: 100%;
+  text-align: center;
+}
+
+.nav-flex-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  position: absolute;
+  z-index: 100;
+  left: 0;
+  width: 100%;
+}
+
+.nav-flex-row li {
+  text-decoration: none;
+  list-style-type: none;
+  padding: 20px 15px;
+  color: #ffffff; /* Ensure list items are visible */
+}
+
+.nav-flex-row li a {
+  font-family: 'Big Shoulders Text', cursive;
+  color: #ffffff;
+  font-size: 1.25em;
+  text-transform: uppercase;
+  font-weight: 300;
+}
+
+/* Section styling */
+.delivery-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.container {
+  background: rgba(255, 255, 255, 0.85);
+  padding: 30px; /* Reduced padding to make the form smaller */
+  border-radius: 15px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
+  width: 80%; /* Reduced width */
+  max-width: 600px; /* Reduced max-width */
+  text-align: center;
+  margin-top: 50px;
+}
+
+h2 {
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+h3 {
+  font-size: 24px;
+  font-weight: 500;
+  margin: 20px 0 10px;
+  color: #444;
+}
+
+p {
+  margin-bottom: 20px;
+  color: #666;
+}
+
+/* Form styling */
+form label {
+  font-weight: bold;
+  color: #333;
+  display: block;
+  margin-bottom: 5px;
+}
+
+form input, form textarea {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 15px;
+}
+
+form input:focus, form textarea:focus {
+  border-color: #ffd700;
+  outline: none;
+}
+
+textarea {
+  resize: none;
+  height: 80px;
+}
+
+.menu-category {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.menu-category label {
+  font-size: 16px;
+  color: #555;
+  display: block;
+  margin: 5px 0;
+}
+
+/* Order summary styling */
+.order-summary {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.order-summary h3 {
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+}
+
+.order-summary button {
+  width: 100%;
+  padding: 12px;
+  background-color: #ffd700;
+  color: #333;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.order-summary button:hover {
+  background-color: #e5c100;
+}
+
+/* Submitted orders styling */
+.submitted-orders {
+  margin-top: 30px;
+}
+
+.submitted-orders h2 {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.order-list {
+  list-style: none;
+  padding: 0;
+}
+
+.order-list li {
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 15px;
+  margin-bottom: 10px;
+  color: #333; /* Ensure text is visible */
+}
+
+.order-list li strong {
+  color: #333;
+}

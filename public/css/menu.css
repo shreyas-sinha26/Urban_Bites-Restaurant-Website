@@ -1,0 +1,131 @@
+/* Background and body settings */
+body {
+  background: url(../img/petr-sevcovic-qE1jxYXiwOA-unsplash.jpg) no-repeat center center fixed;
+  background-size: cover;
+  backdrop-filter: blur(8px); /* Adds a slight blur to the background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  color: #333;
+  overflow: hidden; /* Prevent scrolling */
+  margin: 0;
+}
+
+nav {
+    position: absolute;
+    top: 0.1px;
+    width: 100%;
+    text-align: center;
+}
+
+.nav-flex-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  position: absolute;
+  left: 0;
+  width: 100%;
+}
+
+.nav-flex-row li {
+  text-decoration: none;
+  list-style-type: none;
+  padding: 7.25px 7.25px;
+}
+
+.nav-flex-row li a {
+  font-family: 'Big Shoulders Text', cursive;
+  color: #ffffff;
+  font-size: 1.25em;
+  text-transform: uppercase;
+  font-weight: 300;
+}
+
+.nav-item a:hover {
+  color: #ffd700;
+}
+
+/* Main container styling */
+.container {
+  background: rgba(255, 255, 255, 0.85);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
+  width: 90%;
+  max-width: 600px;
+  text-align: center;
+  margin-top: 50px; /* Add margin-top to move container downwards */
+}
+
+h2 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+p {
+  margin-bottom: 15px;
+  color: #666;
+  font-size: 12px;
+}
+
+/* Grid layout for menu categories */
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Three columns for a compact layout */
+  gap: 10px;
+}
+
+/* Category styling */
+.menu-category {
+  margin-bottom: 10px;
+}
+
+.menu-category h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffd700;
+  margin-bottom: 8px;
+  border-bottom: 1px solid #ffd700;
+  padding-bottom: 3px;
+  text-align: left;
+  font-size: 14px;
+}
+
+/* Menu list styling */
+.menu-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 12px; /* Smaller font size for compact layout */
+}
+
+.menu-list li {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.menu-item {
+  font-weight: bold;
+  color: #333;
+  text-align: left;
+  font-size: 12px;
+}
+
+.menu-price {
+  font-weight: bold;
+  color: #666;
+  text-align: right;
+  font-size: 12px;
+}
+
+/* Hover effect for menu items */
+.menu-list li:hover {
+  background-color: rgba(255, 215, 0, 0.1); /* Light golden background on hover */
+  transition: background-color 0.3s ease;
+}

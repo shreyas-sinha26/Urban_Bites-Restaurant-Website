@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/reservations.css">
+  <title>Reservation - Urban Bites</title>
+</head>
+<body>
+  <nav>
+    <ul class="nav-flex-row">
+      <li><a href="/index">Main Page</a></li>
+      <li><a href="/reservation">Reservation</a></li>
+      <li><a href="/menu">Menu</a></li>
+      <li><a href="/delivery">Home Delivery</a></li>
+    </ul>
+  </nav>
+
+  <section class="reservation-section">
+    <div class="container">
+      <h2>Book Your Table at Urban Bites</h2>
+      <form id="reservationForm" method="post" action="/api/reservations">
+        <div>
+          <label for="name">Name:</label>
+          <input type="text" id="name" name="name" required>
+        </div>
+        <div>
+          <label for="phone">Phone:</label>
+          <input type="tel" id="phone" name="phone" required>
+        </div>
+        <div>
+          <label for="date">Date:</label>
+          <input type="date" id="date" name="date" required>
+        </div>
+        <div>
+          <label for="time">Time:</label>
+          <input type="time" id="time" name="time" required>
+        </div>
+        <div>
+          <label for="guests">Guests:</label>
+          <input type="number" id="guests" name="guests" min="1" max="20" required>
+        </div>
+        <button type="submit">Book Now</button>
+      </form>
+
+      <h2>Existing Reservations</h2>
+      <ul id="reservationList">
+        <% if (reservations.length === 0) { %>
+          <li>No reservations yet.</li>
+        <% } else { %>
+          <% reservations.forEach(reservation => { %>
+            <li>
+              <strong><%= reservation.name %></strong> - 
+              <%= reservation.date %> at <%= reservation.time %>, 
+              <%= reservation.guests %> guests.
+            </li>
+          <% }) %>
+        <% } %>
+      </ul>
+      
+    </div>
+  </section>
+  <script src="/js/reservation.js"></script>
+</body>
+</html>
