@@ -34,6 +34,9 @@ const sessionOptions = {
   },
 };
 
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
 app.use(session(sessionOptions));  // **session middleware comes first**
 app.use(passport.initialize());    // Initialize Passport
 app.use(passport.session());       // Use passport.session() after initializing passport
