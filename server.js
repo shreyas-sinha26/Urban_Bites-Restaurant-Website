@@ -101,6 +101,29 @@ app.post('/login', passport.authenticate('local', {
   successFlash: 'Welcome back!', // Optional success message
 }));
 
+// Add this in server.js near your other routes
+
+app.post('/signup', async (req, res) => {
+    try {
+        const { username, email, password } = req.body;
+        
+        // Create a new user instance (excluding the password)
+        const user = new User({ username, email });
+        
+        // Use passport-local-mongoose's register method to hash and store the password
+        const registeredUser = await User.register(user, password);
+        
+        // Automatically log the user in after successful sign up
+        req.login(registeredUser, err => {
+            if (err) return next(err);
+            req.flash('success', 'Welcome to Urban Bites!');
+            res.redirect('/'); // Redirect to the home page or menu
+        });
+    } catch (e) {
+        req.flash('error', e.message);
+        res.redirect('/signup'); // Redirect back to signup if there's an error
+    }
+});
 
 // Handling order submission
 app.post('/submit-order', async (req, res) => {
@@ -159,7 +182,7 @@ app.get('/api/reservations', async (req, res) => {
 });
 
 // Start the server
-const PORT = 8080;
+const PORT = 8000;
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
