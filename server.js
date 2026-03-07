@@ -8,15 +8,15 @@ const flash = require('connect-flash');
 
 // Models
 const User = require('./models/user');
-const Order = require('./models/order'); 
-const Reservation = require('./models/reservation'); 
+const Order = require('./models/order');
+const Reservation = require('./models/reservation');
 
 const app = express();
 
 // --- Database Connection ---
 mongoose.connect('mongodb://127.0.0.1:27017/ortensia') // Note: You can also rename the DB to ortensia here
-.then(() => console.log('Connected to MongoDB successfully!'))
-.catch(err => console.error('MongoDB connection error:', err));
+    .then(() => console.log('Connected to MongoDB successfully!'))
+    .catch(err => console.error('MongoDB connection error:', err));
 
 // --- App Configuration ---
 app.set('view engine', 'ejs');
@@ -34,7 +34,7 @@ const sessionConfig = {
     saveUninitialized: true,
     cookie: {
         httpOnly: true,
-        expires: Date.now() + 1000 * 60 * 60 * 24 * 7, 
+        expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
         maxAge: 1000 * 60 * 60 * 24 * 7
     }
 };
@@ -54,6 +54,7 @@ app.use((req, res, next) => {
     res.locals.currentUser = req.user;
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
+    res.locals.path = req.path;
     next();
 });
 
@@ -76,7 +77,7 @@ app.post('/signup', async (req, res) => {
         const { username, email, password } = req.body;
         const user = new User({ username, email });
         await User.register(user, password);
-        
+
         // Updated name in flash message!
         req.flash('success', 'Welcome to Ōrtensia! Please log in to enter the site.');
         res.redirect('/login');
@@ -90,16 +91,16 @@ app.get('/login', (req, res) => {
     res.render('login');
 });
 
-app.post('/login', 
-    passport.authenticate('local', { failureFlash: true, failureRedirect: '/login' }), 
+app.post('/login',
+    passport.authenticate('local', { failureFlash: true, failureRedirect: '/login' }),
     (req, res) => {
         req.flash('success', 'Welcome back!');
-        res.redirect('/index'); 
+        res.redirect('/index');
     }
 );
 
 app.get('/logout', (req, res, next) => {
-    req.logout(function(err) {
+    req.logout(function (err) {
         if (err) { return next(err); }
         req.flash('success', 'Goodbye! See you next time.');
         res.redirect('/');
@@ -112,11 +113,11 @@ app.get('/menu', (req, res) => {
 
 app.get('/delivery', async (req, res) => {
     try {
-        const orders = await Order.find({}); 
-        res.render('delivery', { orders }); 
+        const orders = await Order.find({});
+        res.render('delivery', { orders });
     } catch (err) {
         console.error("Error loading orders:", err);
-        res.render('delivery', { orders: [] }); 
+        res.render('delivery', { orders: [] });
     }
 });
 
@@ -135,8 +136,8 @@ app.post('/delivery', async (req, res) => {
 
 app.get('/reservation', async (req, res) => {
     try {
-        const reservations = await Reservation.find({}); 
-        res.render('reservation', { reservations }); 
+        const reservations = await Reservation.find({});
+        res.render('reservation', { reservations });
     } catch (err) {
         console.error("Error loading reservations:", err);
         res.render('reservation', { reservations: [] });

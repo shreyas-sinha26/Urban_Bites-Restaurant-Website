@@ -4,27 +4,27 @@
   --primary-orange-hover: #ea580c;
   --secondary-color: #262626;
   --accent-color: #fb923c;
-  
+
   /* Background Colors */
   --bg-light: #fafafa;
   --bg-dark: #171717;
   --bg-card: #ffffff;
   --bg-card-dark: #262626;
-  
+
   /* Text Colors */
   --text-main: #333333;
   --text-muted: #737373;
   --text-light: #f5f5f5;
-  
+
   /* Typography */
   --font-heading: 'Playfair Display', serif;
   --font-body: 'Poppins', sans-serif;
-  
+
   /* Status Colors */
   --success-color: #22c55e;
   --error-color: #ef4444;
   --warning-color: #eab308;
-  
+
   /* Effects */
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
@@ -58,7 +58,8 @@ body {
   background-color: var(--primary-orange) !important;
   color: #fff !important;
   padding: 0.75rem 1.5rem;
-  border-radius: 9999px; /* Pill shape for modern look */
+  border-radius: 9999px;
+  /* Pill shape for modern look */
   font-weight: 500;
   border: none;
   cursor: pointer;
@@ -92,4 +93,48 @@ body {
 .btn-outline:hover {
   background-color: var(--primary-orange) !important;
   color: #fff !important;
+}
+
+/* Glassmorphism Navbar */
+.navbar {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+}
+
+.nav-link {
+  position: relative;
+  color: #4a4a4a;
+  transition: color 0.3s ease;
+  text-decoration: none;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  width: 0%;
+  height: 2px;
+  bottom: -4px;
+  left: 0;
+  background-color: var(--primary-orange);
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover {
+  color: var(--primary-orange);
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+  width: 100%;
+}
+
+.nav-link.active {
+  color: var(--primary-orange);
+}
+
+.gsap-nav {
+  opacity: 0;
+  transform: translateY(-20px);
 }
