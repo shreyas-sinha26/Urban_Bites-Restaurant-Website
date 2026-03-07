@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Log In - Ōrtensia</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/global.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         body {
@@ -41,14 +42,14 @@
         .input-group input {
             width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 8px; font-size: 15px; transition: all 0.3s ease;
         }
-        .input-group input:focus { border-color: #8e75c6; outline: none; box-shadow: 0 0 8px rgba(142, 117, 198, 0.4); }
+        .input-group input:focus { border-color: var(--primary-orange); outline: none; box-shadow: 0 0 8px rgba(249, 115, 22, 0.4); }
         .submit-btn {
-            width: 100%; padding: 12px; background: #8e75c6; color: white; border: none; border-radius: 8px;
+            width: 100%; padding: 12px; background: var(--primary-orange); color: white; border: none; border-radius: 8px;
             font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.3s; opacity: 0; transform: translateY(20px);
         }
-        .submit-btn:hover { background: #755bb0; }
+        .submit-btn:hover { background: var(--primary-orange-hover); }
         .signup-link { margin-top: 20px; font-size: 14px; color: #666; opacity: 0; }
-        .signup-link a { color: #8e75c6; text-decoration: none; font-weight: 600; }
+        .signup-link a { color: var(--primary-orange); text-decoration: none; font-weight: 600; }
     </style>
 </head>
 <body>

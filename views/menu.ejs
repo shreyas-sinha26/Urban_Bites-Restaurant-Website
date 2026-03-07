@@ -1,143 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <!-- Required meta tags -->
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu - Ōrtensia</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,600&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #fafafa;
+            color: #333;
+        }
+        
+        .title-font { font-family: 'Playfair Display', serif; }
+        
+        /* Hero Section */
+        .hero-section {
+            /* Using the high-end food layout image for the menu hero */
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7)), 
+                        url('/img/petr-sevcovic-qE1jxYXiwOA-unsplash.jpg') no-repeat center center;
+            background-size: cover;
+            background-attachment: fixed;
+            height: 45vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            margin-top: 80px; /* Offset for fixed navbar */
+        }
 
-  <link rel="stylesheet" href="/css/menu.css">
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        /* Glassmorphism Navbar */
+        .navbar {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+        }
+        
+        /* Custom Underline Animation for Nav Links */
+        .nav-link {
+            position: relative;
+            color: #4a4a4a;
+            transition: color 0.3s ease;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0%;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: #f97316; 
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover { color: #f97316; }
+        .nav-link:hover::after, .nav-link.active::after { width: 100%; }
+        .nav-link.active { color: #f97316; }
 
-  <title>Menu - Ōrtensia</title>
+        /* Menu Layout Styles */
+        .menu-category-divider {
+            height: 1px;
+            background: linear-gradient(90deg, rgba(229,231,235,0) 0%, rgba(229,231,235,1) 50%, rgba(229,231,235,0) 100%);
+            margin: 4rem 0;
+        }
+
+        .menu-item {
+            position: relative;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px dashed #e5e7eb;
+        }
+        .menu-item:last-child { border-bottom: none; padding-bottom: 0; }
+
+        .price-tag {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 1.25rem;
+        }
+
+        /* Initial states for GSAP */
+        .gsap-nav { opacity: 0; transform: translateY(-20px); }
+        .gsap-hero { opacity: 0; transform: translateY(30px); }
+        .gsap-category { opacity: 0; transform: translateY(20px); }
+        .gsap-item { opacity: 0; transform: translateY(20px); }
+        
+        /* Floating Flash Messages */
+        .flash-container {
+            position: fixed; top: 100px; left: 50%; transform: translateX(-50%); z-index: 1000;
+            display: flex; flex-direction: column; gap: 15px; pointer-events: none; width: 90%; max-width: 400px;
+        }
+        .flash-message {
+            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); padding: 16px 24px; border-radius: 50px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2); display: flex; align-items: center; gap: 12px;
+            font-weight: 500; font-size: 15px; opacity: 0; transform: translateY(-30px);
+        }
+        .flash-message.error { color: #d9534f; border-left: 5px solid #d9534f; }
+        .flash-message.success { color: #28a745; border-left: 5px solid #28a745; }
+    </style>
 </head>
 <body>
 
-<nav>
-  <ul class="nav-flex-row">
-    <li class="nav-item">
-      <a href="/index">Main Page</a>
-    </li>
-    <li class="nav-item">
-      <a href="/reservation">Reservation</a>
-    </li>
-    <li class="nav-item">
-      <a href="/menu">Menu</a>
-    </li>
-    <li class="nav-item">
-      <a href="/delivery">Home Delivery</a>
-    </li>
-  </ul>
-</nav>
-
-<section class="menu-section">
-  <div class="container">
-    <h2>Our Menu</h2>
-    <p>Discover our diverse range of dishes crafted with fresh ingredients and culinary expertise.</p>
-
-    <div class="menu-grid">
-      <!-- Appetizers -->
-      <div class="menu-category">
-        <h3>Appetizers</h3>
-        <ul class="menu-list">
-          <li><span class="menu-item">Bruschetta</span> <span class="menu-price">₹800</span></li>
-          <li><span class="menu-item">Stuffed Mushrooms</span> <span class="menu-price">₹1000</span></li>
-          <li><span class="menu-item">Garlic Bread</span> <span class="menu-price">₹600</span></li>
-          <li><span class="menu-item">Caprese Salad</span> <span class="menu-price">₹900</span></li>
-          <li><span class="menu-item">Spinach Artichoke Dip</span> <span class="menu-price">₹1200</span></li>
-        </ul>
-      </div>
-
-      <!-- Soups & Salads -->
-      <div class="menu-category">
-        <h3>Soups & Salads</h3>
-        <ul class="menu-list">
-          <li><span class="menu-item">Tomato Basil Soup</span> <span class="menu-price">₹700</span></li>
-          <li><span class="menu-item">Caesar Salad</span> <span class="menu-price">₹800</span></li>
-          <li><span class="menu-item">Greek Salad</span> <span class="menu-price">₹1000</span></li>
-          <li><span class="menu-item">Minestrone Soup</span> <span class="menu-price">₹750</span></li>
-          <li><span class="menu-item">Chicken Caesar Salad</span> <span class="menu-price">₹1200</span></li>
-        </ul>
-      </div>
-
-      <!-- Main Courses -->
-      <div class="menu-category">
-        <h3>Main Courses</h3>
-        <ul class="menu-list">
-          <li><span class="menu-item">Grilled Salmon</span> <span class="menu-price">₹1800</span></li>
-          <li><span class="menu-item">Pasta Carbonara</span> <span class="menu-price">₹1500</span></li>
-          <li><span class="menu-item">Chicken Parmesan</span> <span class="menu-price">₹1600</span></li>
-          <li><span class="menu-item">Chicken Lasagna</span> <span class="menu-price">₹1700</span></li>
-          <li><span class="menu-item">Vegetable Stir-Fry</span> <span class="menu-price">₹1400</span></li>
-        </ul>
-      </div>
-
-      <!-- Pizzas -->
-      <div class="menu-category">
-        <h3>Pizzas</h3>
-        <ul class="menu-list">
-          <li><span class="menu-item">Margherita</span> <span class="menu-price">₹1200</span></li>
-          <li><span class="menu-item">Pepperoni</span> <span class="menu-price">₹1400</span></li>
-          <li><span class="menu-item">BBQ Chicken</span> <span class="menu-price">₹1500</span></li>
-          <li><span class="menu-item">Vegetarian</span> <span class="menu-price">₹1300</span></li>
-          <li><span class="menu-item">Four Cheese</span> <span class="menu-price">₹1400</span></li>
-        </ul>
-      </div>
-
-      <!-- Burgers & Sandwiches -->
-      <div class="menu-category">
-        <h3>Burgers & Sandwiches</h3>
-        <ul class="menu-list">
-          <li><span class="menu-item">Classic Cheeseburger</span> <span class="menu-price">₹1200</span></li>
-          <li><span class="menu-item">Bacon Avocado Burger</span> <span class="menu-price">₹1350</span></li>
-          <li><span class="menu-item">Grilled Chicken Sandwich</span> <span class="menu-price">₹1100</span></li>
-          <li><span class="menu-item">BLT Sandwich</span> <span class="menu-price">₹1000</span></li>
-          <li><span class="menu-item">Pulled Pork Sandwich</span> <span class="menu-price">₹1200</span></li>
-        </ul>
-      </div>
-
-      <!-- Sides -->
-      <div class="menu-category">
-        <h3>Sides</h3>
-        <ul class="menu-list">
-          <li><span class="menu-item">French Fries</span> <span class="menu-price">₹400</span></li>
-          <li><span class="menu-item">Sweet Potato Fries</span> <span class="menu-price">₹500</span></li>
-          <li><span class="menu-item">Coleslaw</span> <span class="menu-price">₹300</span></li>
-          <li><span class="menu-item">Onion Rings</span> <span class="menu-price">₹450</span></li>
-          <li><span class="menu-item">Side Salad</span> <span class="menu-price">₹500</span></li>
-        </ul>
-      </div>
-
-      <!-- Desserts -->
-      <div class="menu-category">
-        <h3>Desserts</h3>
-        <ul class="menu-list">
-          <li><span class="menu-item">Cheesecake</span> <span class="menu-price">₹700</span></li>
-          <li><span class="menu-item">Tiramisu</span> <span class="menu-price">₹800</span></li>
-          <li><span class="menu-item">Chocolate Lava Cake</span> <span class="menu-price">₹900</span></li>
-          <li><span class="menu-item">Ice Cream Sundae</span> <span class="menu-price">₹600</span></li>
-          <li><span class="menu-item">Apple Pie</span> <span class="menu-price">₹700</span></li>
-        </ul>
-      </div>
-
-      <!-- Beverages -->
-      <div class="menu-category">
-        <h3>Beverages</h3>
-        <ul class="menu-list">
-          <li><span class="menu-item">Soft Drinks</span> <span class="menu-price">₹250</span></li>
-          <li><span class="menu-item">Fresh Lemonade</span> <span class="menu-price">₹350</span></li>
-          <li><span class="menu-item">Iced Tea</span> <span class="menu-price">₹300</span></li>
-          <li><span class="menu-item">Coffee</span> <span class="menu-price">₹250</span></li>
-          <li><span class="menu-item">Espresso</span> <span class="menu-price">₹300</span></li>
-          <li><span class="menu-item">Wine (by the glass)</span> <span class="menu-price">₹800</span></li>
-        </ul>
-      </div>
+    <div class="flash-container">
+        <% if(typeof error !== 'undefined' && error.length > 0) { %>
+            <div class="flash-message error"><span>⚠️</span> <span><%= error %></span></div>
+        <% } %>
+        <% if(typeof success !== 'undefined' && success.length > 0) { %>
+            <div class="flash-message success"><span>✅</span> <span><%= success %></span></div>
+        <% } %>
     </div>
-  </div>
-</section>
 
-<!-- Optional JavaScript -->
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6Jty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <nav class="navbar fixed top-0 w-full z-50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex-shrink-0 gsap-nav">
+                    <a href="/index" class="title-font text-2xl font-bold text-gray-800 tracking-tight">
+                        Ōrten<span class="text-orange-500 italic">sia</span>
+                    </a>
+                </div>
+                
+                <div class="hidden md:flex space-x-8 items-center gsap-nav">
+                    <a href="/index" class="nav-link font-medium">Home</a>
+                    <a href="/menu" class="nav-link font-medium active">Menu</a> <a href="/delivery" class="nav-link font-medium">Delivery</a>
+                    <a href="/reservation" class="nav-link font-medium">Reservations</a>
+                    
+                    <div class="pl-4 border-l border-gray-300 flex items-center gap-4">
+                        <% if(typeof currentUser !== 'undefined' && currentUser) { %>
+                            <span class="text-sm font-medium text-gray-500">Hi, <%= currentUser.username %></span>
+                            <a href="/logout" class="bg-gray-800 text-white px-5 py-2 rounded-full text-sm font-medium hover:bg-orange-500 transition-colors shadow-md">Log Out</a>
+                        <% } else { %>
+                            <a href="/login" class="bg-orange-500 text-white px-5 py-2 rounded-full text-sm font-medium hover:bg-orange-600 transition-colors shadow-md shadow-orange-500/30">Log In</a>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
 
+    <header class="hero-section">
+        <div class="max-w-4xl px-4">
+            <h1 class="gsap-hero title-font text-4xl md:text-6xl font-bold mb-4 drop-shadow-lg">
+                Culinary Excellence
+            </h1>
+            <p class="gsap-hero text-lg font-light text-gray-200 drop-shadow-md">
+                A selection of seasonal, locally-sourced dishes crafted with passion.
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        
+        <section class="menu-section">
+            <div class="text-center mb-12 gsap-category">
+                <span class="text-orange-500 font-semibold tracking-widest uppercase text-xs">To Begin</span>
+                <h2 class="title-font text-4xl font-bold text-gray-800 mt-2">Starters</h2>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-10">
+                <div class="menu-item gsap-item">
+                    <div class="flex justify-between items-baseline mb-2">
+                        <h3 class="title-font text-xl font-bold text-gray-800">Truffle Arancini</h3>
+                        <span class="text-orange-500 price-tag">$14</span>
+                    </div>
+                    <p class="text-gray-500 text-sm font-light leading-relaxed">Crispy arborio rice spheres, wild forest mushroom, black truffle aioli, and shaved parmesan.</p>
+                </div>
+                
+                <div class="menu-item gsap-item">
+                    <div class="flex justify-between items-baseline mb-2">
+                        <h3 class="title-font text-xl font-bold text-gray-800">Tuna Tartare</h3>
+                        <span class="text-orange-500 price-tag">$18</span>
+                    </div>
+                    <p class="text-gray-500 text-sm font-light leading-relaxed">Yellowfin tuna, avocado purée, citrus ponzu dressing, served with taro root chips.</p>
+                </div>
+
+                <div class="menu-item gsap-item">
+                    <div class="flex justify-between items-baseline mb-2">
+                        <h3 class="title-font text-xl font-bold text-gray-800">Burrata Caprese</h3>
+                        <span class="text-orange-500 price-tag">$16</span>
+                    </div>
+                    <p class="text-gray-500 text-sm font-light leading-relaxed">Fresh Italian burrata, heirloom tomatoes, aged balsamic reduction, and sweet basil emulsion.</p>
+                </div>
+
+                <div class="menu-item gsap-item">
+                    <div class="flex justify-between items-baseline mb-2">
+                        <h3 class="title-font text-xl font-bold text-gray-800">Wagyu Carpaccio</h3>
+                        <span class="text-orange-500 price-tag">$22</span>
+                    </div>
+                    <p class="text-gray-500 text-sm font-light leading-relaxed">Thinly sliced wagyu beef, caper berries, quail egg, and a light mustard vinaigrette.</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="menu-category-divider"></div>
+
+        <section class="menu-section">
+            <div class="text-center mb-12 gsap-category">
+                <span class="text-orange-500 font-semibold tracking-widest uppercase text-xs">The Highlights</span>
+                <h2 class="title-font text-4xl font-bold text-gray-800 mt-2">Main Courses</h2>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-10">
+                <div class="menu-item gsap-item">
+                    <div class="flex justify-between items-baseline mb-2">
+                        <h3 class="title-font text-xl font-bold text-gray-800">Seared Scallops</h3>
+                        <span class="text-orange-500 price-tag">$34</span>
+                    </div>
+                    <p class="text-gray-500 text-sm font-light leading-relaxed">Jumbo Hokkaido scallops, cauliflower purée, roasted asparagus, and brown butter foam.</p>
+                </div>
+                
+                <div class="menu-item gsap-item">
+                    <div class="flex justify-between items-baseline mb-2">
+                        <h3 class="title-font text-xl font-bold text-gray-800">Duck Breast A L'Orange</h3>
+                        <span class="text-orange-500 price-tag">$38</span>
+                    </div>
+                    <p class="text-gray-500 text-sm font-light leading-relaxed">Pan-seared duck breast, sweet potato mash, braised endive, finished with a spiced blood orange glaze.</p>
+                </div>
+
+                <div class="menu-item gsap-item">
+                    <div class="flex justify-between items-baseline mb-2">
+                        <h3 class="title-font text-xl font-bold text-gray-800">Mushroom Risotto</h3>
+                        <span class="text-orange-500 price-tag">$26</span>
+                    </div>
+                    <p class="text-gray-500 text-sm font-light leading-relaxed">Carnaroli rice cooked in a rich mushroom broth, topped with crispy enoki and a drizzle of white truffle oil.</p>
+                </div>
+
+                <div class="menu-item gsap-item">
+                    <div class="flex justify-between items-baseline mb-2">
+                        <h3 class="title-font text-xl font-bold text-gray-800">Filet Mignon</h3>
+                        <span class="text-orange-500 price-tag">$45</span>
+                    </div>
+                    <p class="text-gray-500 text-sm font-light leading-relaxed">8oz center-cut filet, garlic potato gratin, charred broccolini, and a rich red wine demi-glace.</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="menu-category-divider"></div>
+
+        <section class="menu-section">
+            <div class="text-center mb-12 gsap-category">
+                <span class="text-orange-500 font-semibold tracking-widest uppercase text-xs">Sweet Endings</span>
+                <h2 class="title-font text-4xl font-bold text-gray-800 mt-2">Desserts</h2>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-10">
+                <div class="menu-item gsap-item">
+                    <div class="flex justify-between items-baseline mb-2">
+                        <h3 class="title-font text-xl font-bold text-gray-800">Lavender Panna Cotta</h3>
+                        <span class="text-orange-500 price-tag">$12</span>
+                    </div>
+                    <p class="text-gray-500 text-sm font-light leading-relaxed">Silky Italian cream infused with organic lavender, topped with a mixed berry compote.</p>
+                </div>
+                
+                <div class="menu-item gsap-item">
+                    <div class="flex justify-between items-baseline mb-2">
+                        <h3 class="title-font text-xl font-bold text-gray-800">Dark Chocolate Soufflé</h3>
+                        <span class="text-orange-500 price-tag">$14</span>
+                    </div>
+                    <p class="text-gray-500 text-sm font-light leading-relaxed">Molten 72% cacao cake, served warm alongside Madagascar vanilla bean gelato.</p>
+                </div>
+            </div>
+            
+            <div class="mt-16 text-center gsap-item">
+                <p class="text-gray-500 italic mb-6">Ready to experience these flavors?</p>
+                <a href="/reservation" class="inline-block bg-orange-500 hover:bg-orange-600 text-white font-semibold px-8 py-3.5 rounded-full shadow-lg shadow-orange-500/30 transition-transform hover:-translate-y-1">
+                    Book a Table
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-900 text-gray-400 py-12 mt-10">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <h2 class="title-font text-3xl font-bold text-white mb-2">Ōrten<span class="text-orange-500 italic">sia</span></h2>
+            <p class="text-sm opacity-60">© 2024 Ōrtensia Restaurant. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            gsap.registerPlugin(ScrollTrigger);
+
+            // Flash Message Toast Animation
+            const flashMessages = document.querySelectorAll(".flash-message");
+            if (flashMessages.length > 0) {
+                gsap.timeline()
+                    .to(".flash-message", { duration: 0.6, opacity: 1, y: 0, stagger: 0.15, ease: "back.out(1.5)", delay: 0.5 })
+                    .to(".flash-message", { duration: 0.5, opacity: 0, y: -30, stagger: 0.1, ease: "power2.in", delay: 3.5 });
+            }
+
+            // Navbar and Hero Animations
+            gsap.to(".gsap-nav", { duration: 0.8, opacity: 1, y: 0, stagger: 0.1, ease: "power3.out" });
+            gsap.to(".gsap-hero", { duration: 1, opacity: 1, y: 0, stagger: 0.2, ease: "power3.out", delay: 0.2 });
+
+            // ScrollTrigger Animations for Menu Categories and Items
+            const categories = document.querySelectorAll('.menu-section');
+            
+            categories.forEach(section => {
+                const title = section.querySelector('.gsap-category');
+                const items = section.querySelectorAll('.gsap-item');
+
+                // Animate category titles
+                gsap.to(title, {
+                    scrollTrigger: {
+                        trigger: section,
+                        start: "top 80%", // Animates when the top of the section hits 80% of the viewport height
+                    },
+                    duration: 0.8,
+                    opacity: 1,
+                    y: 0,
+                    ease: "power3.out"
+                });
+
+                // Animate individual menu items staggering in
+                gsap.to(items, {
+                    scrollTrigger: {
+                        trigger: section,
+                        start: "top 75%",
+                    },
+                    duration: 0.8,
+                    opacity: 1,
+                    y: 0,
+                    stagger: 0.15,
+                    ease: "power3.out",
+                    delay: 0.2
+                });
+            });
+        });
+    </script>
 </body>
-
+</html>

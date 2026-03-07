@@ -3,55 +3,264 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reservation - Ōrtensia</title>
+    <title>Reservations - Ōrtensia</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Text:wght@100;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,600&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     
-    <link rel="stylesheet" href="/css/index.css">
-    <link rel="stylesheet" href="/css/reservations.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #fafafa;
+            color: #333;
+        }
+        
+        .title-font { font-family: 'Playfair Display', serif; }
+        
+        /* Hero Section - Shorter for inner pages */
+        .hero-section {
+            /* Using the Brooke Lark image which fits the reservation theme perfectly */
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), 
+                        url('/img/brooke-lark-aGjP08-HbYY-unsplash.jpg') no-repeat center center;
+            background-size: cover;
+            background-attachment: fixed;
+            height: 45vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            margin-top: 80px; /* Offset for fixed navbar */
+        }
+
+        /* Glassmorphism Navbar */
+        .navbar {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+        }
+        
+        /* Custom Underline Animation for Nav Links */
+        .nav-link {
+            position: relative;
+            color: #4a4a4a;
+            transition: color 0.3s ease;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0%;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: #f97316; 
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover { color: #f97316; }
+        .nav-link:hover::after, .nav-link.active::after { width: 100%; }
+        .nav-link.active { color: #f97316; }
+
+        /* Form Inputs */
+        .form-input {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            background-color: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+        .form-input:focus {
+            outline: none;
+            border-color: #f97316;
+            box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
+            background-color: #fff;
+        }
+
+        /* Initial states for GSAP */
+        .gsap-nav { opacity: 0; transform: translateY(-20px); }
+        .gsap-hero { opacity: 0; transform: translateY(30px); }
+        .gsap-form { opacity: 0; transform: translateX(-30px); }
+        .gsap-list { opacity: 0; transform: translateX(30px); }
+        
+        /* Floating Flash Messages */
+        .flash-container {
+            position: fixed; top: 100px; left: 50%; transform: translateX(-50%); z-index: 1000;
+            display: flex; flex-direction: column; gap: 15px; pointer-events: none; width: 90%; max-width: 400px;
+        }
+        .flash-message {
+            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); padding: 16px 24px; border-radius: 50px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2); display: flex; align-items: center; gap: 12px;
+            font-weight: 500; font-size: 15px; opacity: 0; transform: translateY(-30px);
+        }
+        .flash-message.error { color: #d9534f; border-left: 5px solid #d9534f; }
+        .flash-message.success { color: #28a745; border-left: 5px solid #28a745; }
+    </style>
 </head>
 <body>
-    <header>
-        <nav class="nav-flex-row">
-            <div class="nav-brand">
-                <a href="/">Ōrtensia</a>
+
+    <div class="flash-container">
+        <% if(typeof error !== 'undefined' && error.length > 0) { %>
+            <div class="flash-message error"><span>⚠️</span> <span><%= error %></span></div>
+        <% } %>
+        <% if(typeof success !== 'undefined' && success.length > 0) { %>
+            <div class="flash-message success"><span>✅</span> <span><%= success %></span></div>
+        <% } %>
+    </div>
+
+    <nav class="navbar fixed top-0 w-full z-50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex-shrink-0 gsap-nav">
+                    <a href="/index" class="title-font text-2xl font-bold text-gray-800 tracking-tight">
+                        Ōrten<span class="text-orange-500 italic">sia</span>
+                    </a>
+                </div>
+                
+                <div class="hidden md:flex space-x-8 items-center gsap-nav">
+                    <a href="/index" class="nav-link font-medium">Home</a>
+                    <a href="/menu" class="nav-link font-medium">Menu</a>
+                    <a href="/delivery" class="nav-link font-medium">Delivery</a>
+                    <a href="/reservation" class="nav-link font-medium active">Reservations</a> <div class="pl-4 border-l border-gray-300 flex items-center gap-4">
+                        <% if(typeof currentUser !== 'undefined' && currentUser) { %>
+                            <span class="text-sm font-medium text-gray-500">Hi, <%= currentUser.username %></span>
+                            <a href="/logout" class="bg-gray-800 text-white px-5 py-2 rounded-full text-sm font-medium hover:bg-orange-500 transition-colors shadow-md">Log Out</a>
+                        <% } else { %>
+                            <a href="/login" class="bg-orange-500 text-white px-5 py-2 rounded-full text-sm font-medium hover:bg-orange-600 transition-colors shadow-md shadow-orange-500/30">Log In</a>
+                        <% } %>
+                    </div>
+                </div>
             </div>
-            <ul class="nav-links">
-                <li><a href="/">Home</a></li>
-                <li><a href="/menu">Menu</a></li>
-                <li><a href="/delivery">Delivery</a></li>
-                <li><a href="/reservation" class="active">Reservation</a></li>
-            </ul>
-        </nav>
+        </div>
+    </nav>
+
+    <header class="hero-section">
+        <div class="max-w-4xl px-4">
+            <h1 class="gsap-hero title-font text-4xl md:text-6xl font-bold mb-4 drop-shadow-lg">
+                Reserve Your Table
+            </h1>
+            <p class="gsap-hero text-lg font-light text-gray-200 drop-shadow-md">
+                Ensure your spot for an evening of exquisite culinary craftsmanship.
+            </p>
+        </div>
     </header>
 
-    <main class="page-container">
-        <div class="form-card">
-            <h2 class="page-title">Book a Table</h2>
-            <p class="page-subtitle">Reserve your spot at Ōrtensia for an unforgettable dining experience.</p>
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
             
-            <form action="/reservation" method="POST" class="elegant-form">
-                <div class="form-group">
-                    <label for="name">Name</label>
-                    <input type="text" id="name" name="name" required placeholder="Your Name">
+            <div class="gsap-form bg-white rounded-2xl shadow-xl border border-gray-100 p-8 md:p-10">
+                <h2 class="title-font text-3xl font-bold text-gray-800 mb-2">Book Now</h2>
+                <p class="text-gray-500 text-sm mb-8">Please fill out the details below to secure your reservation.</p>
+                
+                <form action="/reservation" method="POST" class="space-y-5">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                        <input type="text" name="name" class="form-input" placeholder="e.g. Jane Doe" required>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                        <input type="tel" name="phone" class="form-input" placeholder="+1 (555) 000-0000" required>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Date</label>
+                            <input type="date" name="date" class="form-input" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Time</label>
+                            <input type="time" name="time" class="form-input" required>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Number of Guests</label>
+                        <input type="number" name="guests" min="1" max="20" class="form-input" placeholder="2" required>
+                    </div>
+
+                    <button type="submit" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3.5 rounded-xl shadow-lg shadow-orange-500/30 transition-all duration-300 hover:-translate-y-1 mt-4">
+                        Confirm Reservation
+                    </button>
+                </form>
+            </div>
+
+            <div class="gsap-list">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="title-font text-3xl font-bold text-gray-800">Your Bookings</h2>
+                    <span class="bg-gray-100 text-gray-600 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
+                        <%= typeof reservations !== 'undefined' ? reservations.length : 0 %> Total
+                    </span>
                 </div>
-                <div class="form-group">
-                    <label for="date">Date</label>
-                    <input type="date" id="date" name="date" required>
+
+                <div class="space-y-4 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
+                    <% if (typeof reservations !== 'undefined' && reservations.length > 0) { %>
+                        <% reservations.forEach(reservation => { %>
+                            <div class="bg-white p-6 rounded-xl shadow-md border-l-4 border-orange-500 hover:shadow-lg transition-shadow duration-300">
+                                <div class="flex justify-between items-start mb-2">
+                                    <h3 class="font-semibold text-lg text-gray-800"><%= reservation.name %></h3>
+                                    <span class="bg-orange-100 text-orange-600 text-xs font-bold px-2.5 py-1 rounded-md">
+                                        <%= reservation.guests %> Guests
+                                    </span>
+                                </div>
+                                <div class="text-sm text-gray-500 space-y-1">
+                                    <p class="flex items-center gap-2">
+                                        <span>📞</span> <%= reservation.phone %>
+                                    </p>
+                                    <p class="flex items-center gap-2 text-gray-700 font-medium mt-2">
+                                        <span>📅</span> <%= reservation.date %> at <%= reservation.time %>
+                                    </p>
+                                </div>
+                            </div>
+                        <% }) %>
+                    <% } else { %>
+                        <div class="bg-gray-50 border-2 border-dashed border-gray-200 rounded-xl p-10 text-center flex flex-col items-center justify-center h-full">
+                            <span class="text-4xl mb-3 opacity-50">🍽️</span>
+                            <h3 class="text-lg font-medium text-gray-700">No reservations yet</h3>
+                            <p class="text-gray-400 text-sm mt-1">Book your first table using the form!</p>
+                        </div>
+                    <% } %>
                 </div>
-                <div class="form-group">
-                    <label for="time">Time</label>
-                    <input type="time" id="time" name="time" required>
-                </div>
-                <div class="form-group">
-                    <label for="guests">Number of Guests</label>
-                    <input type="number" id="guests" name="guests" min="1" max="20" required placeholder="2">
-                </div>
-                <button type="submit" class="btn-primary">Confirm Reservation</button>
-            </form>
+            </div>
+
         </div>
-    </main>
+    </section>
+
+    <footer class="bg-gray-900 text-gray-400 py-12 mt-10">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <h2 class="title-font text-3xl font-bold text-white mb-2">Ōrten<span class="text-orange-500 italic">sia</span></h2>
+            <p class="text-sm opacity-60">© 2024 Ōrtensia Restaurant. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Flash Message Toast Animation
+            const flashMessages = document.querySelectorAll(".flash-message");
+            if (flashMessages.length > 0) {
+                gsap.timeline()
+                    .to(".flash-message", { duration: 0.6, opacity: 1, y: 0, stagger: 0.15, ease: "back.out(1.5)", delay: 0.5 })
+                    .to(".flash-message", { duration: 0.5, opacity: 0, y: -30, stagger: 0.1, ease: "power2.in", delay: 4.5 });
+            }
+
+            // Navbar items sliding down
+            gsap.to(".gsap-nav", { duration: 0.8, opacity: 1, y: 0, stagger: 0.1, ease: "power3.out" });
+
+            // Hero section text floating up
+            gsap.to(".gsap-hero", { duration: 1, opacity: 1, y: 0, stagger: 0.2, ease: "power3.out", delay: 0.2 });
+
+            // Form sliding in from the left
+            gsap.to(".gsap-form", { duration: 0.8, opacity: 1, x: 0, ease: "power3.out", delay: 0.5 });
+
+            // Existing reservations sliding in from the right
+            gsap.to(".gsap-list", { duration: 0.8, opacity: 1, x: 0, ease: "power3.out", delay: 0.7 });
+        });
+    </script>
 </body>
 </html>
